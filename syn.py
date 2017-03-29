@@ -16,3 +16,5 @@ except InvalidArgumentsException as error:
         f.write(error.message)
 
     sys.exit(error.code)
+
+sys.exit(0)
