@@ -13,37 +13,37 @@ class ArgumentsParser:
         self._config = config
 
         for arg in sys.argv[1:]:  # skip the script path
-            print(arg)
+            # print(arg)
 
             if self._process_argument(r"^--input=(.*)$", arg, 'input'):
-                print('match input')
+                pass #print('match input')
             elif self._process_argument(r"^-i=(.*)$", arg, 'input'):
-                print('match i')
+                pass #print('match i')
             elif self._process_argument(r"^--output=(.*)$", arg, 'output'):
-                print('match output')
+                pass #print('match output')
             elif self._process_argument(r"^-o=(.*)$", arg, 'output'):
-                print('match o')
+                pass #print('match o')
             elif self._process_argument(r"^--help$", arg, 'help', False):
-                print('match help')
+                pass #print('match help')
             elif self._process_argument(r"^-h$", arg, 'help', False):
-                print('match h')
+                pass #print('match h')
             elif self._process_argument(r"^--format=(.*)$", arg, 'format'):
-                print('match format')
+                pass #print('match format')
             elif self._process_argument(r"^-f=(.*)$", arg, 'format'):
-                print('match f')
+                pass #print('match f')
             elif self._process_argument(r"^--br$", arg, 'br', False):
-                print('match br')
+                pass #print('match br')
             elif self._process_argument(r"^-b$", arg, 'br', False):
-                print('match b')
+                pass #print('match b')
             else:
                 raise InvalidArgumentsException.InvalidArgumentsException('Unknown argument ' + arg)
 
-        print("config values: ", self._config.values)
+        # print("config values: ", self._config.values)
 
     def _process_argument(self, regex: str, arg: str, arg_semantics: str, add_to_config: bool = True) -> bool:
         input_match = re.search(regex, arg)
         if input_match:
-            print('match ' + arg_semantics)
+            # print('match ' + arg_semantics)
             self._add_to_processed(arg_semantics)
 
             try:
@@ -63,4 +63,4 @@ class ArgumentsParser:
         else:
             self._processedArguments.append(arg_semantics)
 
-        print("Processed so far:", self._processedArguments)
+        # print("Processed so far:", self._processedArguments)

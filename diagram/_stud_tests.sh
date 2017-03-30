@@ -69,7 +69,7 @@ LOCAL_OUT_PATH3="`pwd`/" #Alternative 2 (absolute path)
 LOG_PATH="./"
 
 cp -r ../app .
-cp syn.py .
+cp ../syn.py .
 
 # test01: Argument error; Expected output: test01.out; Expected return code: 1
 $INTERPRETER $TASK.$EXTENSION --error 2> ${LOG_PATH}test01.err

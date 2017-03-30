@@ -1,4 +1,5 @@
 from app.arguments.Config import Config
+from app.io.exceptions.OutputFileException import OutputFileException
 
 
 class Output:
@@ -11,6 +12,13 @@ class Output:
         if self._config.use_stdout():
             print(output, flush=True)
         else:
-            with open(self._config.values['output'], 'w') as f:
-                f.write(str)
+            try:
+                with open(self._config.values['output'], 'w') as f:
+                    f.write(str)
+            except:
+                raise OutputFileException('Error writing the output')
+
+
+
+
 
