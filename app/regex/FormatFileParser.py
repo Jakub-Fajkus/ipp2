@@ -1,4 +1,7 @@
 import re
+from app.format.tags import HtmlTag
+from app.regex.InputRegex import InputRegex
+from app.regex.exceptions.InvalidRegexException import InvalidRegexException
 
 
 class FormatFileParser:
@@ -6,28 +9,40 @@ class FormatFileParser:
         pass
 
     def parse_formatting(self, formatting_string: str):
-        pass
         # iterate over lines '\n'
         # for each line, separate the regex and the formatting
+        formattings = []
+
+        tuple_number = 0
+
         for line in str.split(formatting_string, '\n'):
-            print('Line length:', len(line))
             if len(line) == 0:
-                print("SKIPPING EMPTY LINE")
                 continue
 
             # the regex and the formatting is separeted by \t+
             # get the regex(before first '\t+'
-            regex_match = re.match(r'^(.*?)\t+()', line)
+            regex_match = re.match(r'^(.*?)(\t+)(.*$)', line)
             if regex_match:
-                regex = regex_match.groups(0)
-                print('Found regex:', regex[0])
+                regex = regex_match.groups()[0]
+                regex_object = InputRegex(regex)
+                regex_object.convert_to_python_regex()
+                # print("Regex:", regex)
 
-                # line = line[regex.]
-            else:
-                print('No match for line: ', line)
-                # todo: throw invalid format?!?!??!?!?
-
-
+                tags = []
                 # the formatting is a list of strings, separated by ',[SPACE\t]*'
-                # todo: how to get the formatting strings? :D as in ipp1?
-                # if re.search()
+                for formatting in regex_match.groups()[2].split(','):  # get the 3rd group and split it by ','
+                    # print(formatting)
+                    # print(formatting.strip())
+
+                    if not formatting:
+                        raise InvalidRegexException('Empty formatting on line: ' + line)
+
+                    tags.append(HtmlTag.create(formatting.strip()))
+
+                formattings.append((regex_object, tags, tuple_number))
+                tuple_number += 1
+
+            else:
+                raise InvalidRegexException('No match found for line' + line)
+
+        return formattings

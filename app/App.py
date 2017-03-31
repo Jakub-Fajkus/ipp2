@@ -2,6 +2,7 @@ from app.arguments.Config import Config
 from app.Replacer import Replacer
 from app.io.Input import Input
 from app.io.Output import Output
+from app.regex.FormatFileParser import FormatFileParser
 
 class App:
     def __init__(self, config: Config):
@@ -16,15 +17,17 @@ class App:
 
         input = Input(config=self._config)
         output = Output(config=self._config)
+        format_parser = FormatFileParser()
         input_string = input.get_input()
 
-        formating = input.get_format_table()
-        if not formating:
+        formatting = input.get_format_table()
+        if not formatting:
             output.present_output(input_string)
 
             return
 
-        replacer = Replacer(input_string)
+        formatting = format_parser.parse_formatting(formatting)
+        replacer = Replacer(input_string, formatting)
         output_string = replacer.replace_all()
 
         output.present_output(output_string)

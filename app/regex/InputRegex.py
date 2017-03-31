@@ -9,7 +9,7 @@ class InputRegex():
     each file has 1 regex per line 
     """
     allowed_special_expressions = {
-        '%s': r'([\t\n\r\f\v])',
+        '%s': r'(\s)',
         '%a': r'(.)',
         '%d': r'([0-9])',
         '%l': r'([a-z])',
@@ -19,7 +19,7 @@ class InputRegex():
         '%t': r'(\t)',
         '%n': r'(\n)',
         '%.': r'(\.)',
-        '%|': r'(\|)',
+        '%|': r'(|)',
         '%!': r'(!)',
         '%*': r'(\*)',
         '%+': r'(\+)',
@@ -38,9 +38,26 @@ class InputRegex():
             :raises InvalidRegexException
         """
 
+        self._validate()
+
         self._convert_special_expressions()
 
-        # print(self.python_regex)
+        #  todo: add parentesis?
+        pass
+
+    def _validate(self):
+        """go through the regex and try to determine whether it has the right format"""
+    #     todo! validate the regex..
+
+        match = re.search(r'\.{2,}', self.python_regex)
+        if match:
+            raise InvalidRegexException('Regex can not contain A..+A')
+
+        self.python_regex = re.sub(r'\.', '', self.python_regex)
+
+        self.python_regex = re.sub(r'!%.', repl=r'', string=self.python_regex)
+
+
 
     def _convert_special_expressions(self):
         """convert the special regular expressions"""
@@ -55,4 +72,5 @@ class InputRegex():
                 raise InvalidRegexException('Invalid special expression: ' + special)
             else:
                 # replace the special character for it's python representation in the output regex
+                # todo: negate!?
                 self.python_regex = self.python_regex.replace(special, self.allowed_special_expressions[special])

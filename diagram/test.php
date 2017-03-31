@@ -35,22 +35,19 @@ foreach ($referentialCodeFiles as $index => $refCodeFile) {
     $diffFile = $dir . '/' . $referentialOutFiles[$index] . '.diff';
     shell_exec("touch $diffFile");
 
-//    if ($actualOutput !== $expectedOutput) {
-//        $testFailed = true;
-//        echo 'FAILED'.PHP_EOL;
-//
-//        echo 'EXPECTED:>>>>'.PHP_EOL;
-//        echo implode('', $actualOutput);
-//        echo PHP_EOL.'<<<<<'.PHP_EOL;
-//
-//        echo 'ACTUAL:>>>>'.PHP_EOL;
-//        echo $expectedOutput;
-//        echo PHP_EOL.'<<<<<'.PHP_EOL;
-//
-//        var_dump($actualOutput, $expectedOutput);
-//    } else {
-//        echo 'OUTPUT OK'.PHP_EOL;
-//    }
+    shell_exec("diff $expectedOutputFile $actualOutputFile > $diffFile");
+    $diff = file_get_contents($diffFile);
+
+    if ($diff) {
+        $testFailed = true;
+        echo 'FAILED'.PHP_EOL;
+
+        echo 'DIFF:>>>>'.PHP_EOL;
+        echo $diff;
+        echo PHP_EOL.'<<<<<'.PHP_EOL;
+    } else {
+        echo 'OUTPUT OK'.PHP_EOL;
+    }
 
     if ($expectedCode !== $actualCode) {
         $testFailed = true;

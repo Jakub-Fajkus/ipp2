@@ -6,31 +6,39 @@ from app.arguments.exceptions.InvalidArgumentsException import InvalidArgumentsE
 from app.io.exceptions.InputFileException import InputFileException
 from app.io.exceptions.OutputFileException import OutputFileException
 from app.regex.FormatFileParser import FormatFileParser
-
+from app.regex.exceptions.InvalidRegexException import InvalidRegexException
+from app.regex.InputRegex import InputRegex
+import re
 config = Config.Config()
 argParser = ArgumentsParser.ArgumentsParser()
 app = App.App(config)
 
-# regex = InputRegex(input_regex='%s %a %d %l %L%w%W%t%n%|%!%*%+ %(%) %%')
+# regex = InputRegex(input_regex='%s !%a !%d %l %L%w%W%t%n%|%!%*%+ %( %) %%')
 # regex2 = InputRegex(input_regex=r'mame zere %Wmaso %!')
 # regex.convert_to_python_regex()
 # regex2.convert_to_python_regex()
 
-parser = FormatFileParser()
-parser.parse_formatting("""a	bold
-b	italic 
-ccd		underline, 	 bold
-d	teletype
-e	size:1
-f	size:7
-g	color:000000
-h	color:FFFFFF
-""")
+
+# parser = FormatFileParser()
+# parser.parse_formatting("""%s !%a !%d %l %L%w%W%t%n%|%!%*%+ %( %) %%	bold, italic, teletype, size:5""")
+# parser.parse_formatting("""a	bold
+# b	italic
+# ccd		underline, 	 bold
+# d	teletype
+# e	size:1
+# f	size:7
+# g	color:000000
+# h	color:FFFFFF
+# """)
+
+# neco = re.search(r'([\t\n\r\f\v])', """
+# """)
+
 
 try:
     argParser.parse_arguments(config=config)
     app.run()
-except (InvalidArgumentsException, InputFileException, OutputFileException) as error:
+except (InvalidArgumentsException, InputFileException, OutputFileException, InvalidRegexException) as error:
     print("********************************syn.py here, caught an exception:********************************",
           file=sys.stderr)
     print(error.message, file=sys.stderr)

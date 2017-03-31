@@ -10,11 +10,14 @@ class Output:
         """Print the output to the console or to a file"""
 
         if self._config.use_stdout():
-            print(output, flush=True)
+            print(output, flush=True, end='')
         else:
             try:
-                with open(self._config.values['output'], 'w') as f:
-                    f.write(str)
+                print("OUTPUT FILE IS THERE!!!!", self._config.values['output'])
+                with open(self._config.values['output'], mode='w', newline='') as f:
+                    print("PRINITNG OUTPUT>>>>"+output+"<<<<<")
+                    f.write(output)
+                    print("OUTPUT FILE IS THERE!!!!", "After write")
             except:
                 raise OutputFileException('Error writing the output')
 
