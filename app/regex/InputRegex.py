@@ -51,13 +51,29 @@ class InputRegex():
 
         match = re.search(r'\.{2,}', self.python_regex)
         if match:
-            raise InvalidRegexException('Regex can not contain A..+A')
+            raise InvalidRegexException('Regex can not contain A.(.+)A')
+        # self.python_regex = re.escape(self.python_regex)
 
         # self.python_regex = re.sub(r'\.', '', self.python_regex)
-        # remove dot which is not ater percent sign
+        # remove dot which is not after percent sign
         self.python_regex = re.sub(r'(?<!%)\.', '', self.python_regex)  # negative lookbehind
 
-        self.python_regex = re.sub(r'!%.', repl=r'', string=self.python_regex)
+        # substitude common regex symbols
+        # escape
+        # self._escape(r'({.*?})')  # a{3}
+        # self._escape(r'(\[.*?\])')  # [...]
+        # self.python_regex = self.python_regex.replace('^', '\^')  # ^test$
+        # self.python_regex = self.python_regex.replace('$', '\$')  #
+        # self.python_regex = self.python_regex.replace('?', '\?')  #
+        # self.python_regex = self.python_regex.replace('{', '\{')  #
+        # self.python_regex = self.python_regex.replace('}', '\}')  #
+        # self.python_regex = self.python_regex.replace('[', '\[')  #
+        # self.python_regex = self.python_regex.replace(']', '\]')  #
+        # self.python_regex = self.python_regex.replace(r"\n", r"\\n")  #
+        self.python_regex = re.sub(r'([\\\?\[\^\]\$\{\}\<\>\-])', r'\\\1', self.python_regex)
+
+        pass
+        # self.python_regex = re.sub(r'!%.', repl=r'', string=self.python_regex)
 
     def _convert_special_expressions(self):
         """convert the special regular expressions"""
@@ -66,10 +82,15 @@ class InputRegex():
         specials = re.findall(r'(%.)', self.python_regex)
 
         for special in specials:
-            print(special)
+            # print(special)
             if special not in self.allowed_special_expressions:
                 raise InvalidRegexException('Invalid special expression: ' + special)
             else:
                 # replace the special character for it's python representation in the output regex
                 # todo: negate!?
                 self.python_regex = self.python_regex.replace(special, self.allowed_special_expressions[special])
+
+    def _escape(self, input_regex: str):
+        finds = re.findall(input_regex, self.python_regex)
+        for find in finds:
+            self.python_regex = self.python_regex.replace(find, re.escape(find))
