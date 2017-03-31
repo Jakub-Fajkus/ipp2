@@ -19,7 +19,7 @@ class InputRegex():
         '%t': r'(\t)',
         '%n': r'(\n)',
         '%.': r'(\.)',
-        '%|': r'(|)',
+        '%|': r'(\|)',
         '%!': r'(!)',
         '%*': r'(\*)',
         '%+': r'(\+)',
@@ -47,24 +47,23 @@ class InputRegex():
 
     def _validate(self):
         """go through the regex and try to determine whether it has the right format"""
-    #     todo! validate the regex..
+        #     todo! validate the regex..
 
         match = re.search(r'\.{2,}', self.python_regex)
         if match:
             raise InvalidRegexException('Regex can not contain A..+A')
 
-        self.python_regex = re.sub(r'\.', '', self.python_regex)
+        # self.python_regex = re.sub(r'\.', '', self.python_regex)
+        # remove dot which is not ater percent sign
+        self.python_regex = re.sub(r'(?<!%)\.', '', self.python_regex)  # negative lookbehind
 
         self.python_regex = re.sub(r'!%.', repl=r'', string=self.python_regex)
-
-
 
     def _convert_special_expressions(self):
         """convert the special regular expressions"""
 
         # get all special regexes (char % and another char)
         specials = re.findall(r'(%.)', self.python_regex)
-
 
         for special in specials:
             print(special)
