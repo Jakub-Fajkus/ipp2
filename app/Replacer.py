@@ -19,16 +19,21 @@ class Replacer:
         for current_position in range(0, len(self.input_string)):
             # close all tags
             if current_position in self.queues:
+
+                if len(self.queues[current_position]) > 1:
+                    pass
+
                 for tag in self.queues[current_position]:
                     self.output_string += tag.closing
 
             # get match for all regexes(in the order in the given rules)
             for formatting_tuple in self.formattings:
                 if not self.is_delayed(formatting_tuple):
+                    # print(formatting_tuple[0].python_regex)
                     match = re.match(formatting_tuple[0].python_regex, self.input_string[current_position:], flags=re.DOTALL)
                     if match:
-                        # print(match)
                         match_size = match.regs[0][1]
+                        # print(match, match_size, match.re)
 
                         # remove empty string matches
                         if match_size != 0:
@@ -38,7 +43,10 @@ class Replacer:
                                 self.output_string += tag.opening
 
                                 if current_position + match_size in self.queues:
+                                    # print('COLLISION ON QUEUES!', current_position, tag)
+
                                     self.queues[current_position + match_size].insert(0, tag)  # add tags to close
+                                    # self.queues[current_position + match_size].append(tag)  # add tags to close
                                 else:
                                     self.queues[current_position + match_size] = [tag]
 
@@ -49,6 +57,7 @@ class Replacer:
         if len(self.input_string) in self.queues:
             self.queues[len(self.input_string)].reverse()
             for tag in self.queues[len(self.input_string)]:
+                # print("CLOSING TAG:", tag.closing)
                 self.output_string += tag.closing
 
         # print(self.output_string)
