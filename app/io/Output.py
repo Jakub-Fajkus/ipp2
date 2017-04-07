@@ -13,11 +13,11 @@ class Output:
             print(output, flush=True, end='')
         else:
             try:
-                print("OUTPUT FILE IS THERE!!!!", self._config.values['output'])
+                # print("OUTPUT FILE IS THERE!!!!", self._config.values['output'])
                 with open(self._config.values['output'], mode='w', newline='') as f:
-                    print("PRINITNG OUTPUT>>>>"+output+"<<<<<")
+                    # print("PRINITNG OUTPUT>>>>"+output+"<<<<<")
                     f.write(output)
-                    print("OUTPUT FILE IS THERE!!!!", "After write")
+                    # print("OUTPUT FILE IS THERE!!!!", "After write")
             except:
                 raise OutputFileException('Error writing the output')
 
