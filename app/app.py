@@ -41,10 +41,15 @@ class App:
 
         self.present_output(output_string)
 
-    @staticmethod
-    def print_help():
-        # todo: print help!
-        print("Printing some help...\nHELP!!!!\nHELP MEEEE!\nI am drowning in a pool!\n...")
+    def print_help(self):
+        self.present_output("""
+        The arguments supported(with abbreviation):
+            - input(i)
+            - output(o)
+            - help(h)
+            - format(f)
+            - br(b)"""
+                            )
 
     def present_output(self, output_string: str):
         output = Output(config=self._config)
