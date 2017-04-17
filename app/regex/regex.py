@@ -1,9 +1,18 @@
+"""
+    File name: regex.py
+    Author: Jakub Fajkus
+    Date created: 14.4.2017
+    Date last modified: 17.4.2017
+    Python Version: 3.6
+"""
+
 import re
-from app.format.tags import HtmlTag
+from app.format.tags import TagFactory
 from app.regex.exceptions import InvalidRegexException
 
 
 class FormatFileParser:
+    """Parses the content of the formatting file and represents it as a set of tags and regular expressions."""
     def parse_formatting(self, formatting_string: str):
         # iterate over lines '\n'
         # for each line, separate the regex and the formatting
@@ -33,7 +42,7 @@ class FormatFileParser:
                     if not formatting:
                         raise InvalidRegexException('Empty formatting on line: ' + line)
 
-                    tags.append(HtmlTag.create(formatting.strip()))
+                    tags.append(TagFactory.create(formatting.strip()))
 
                 formattings.append((regex_object, tags, tuple_number))
                 tuple_number += 1
@@ -45,9 +54,9 @@ class FormatFileParser:
 
 
 class InputRegex:
-    """representing the input regex from the file
+    """Represents the input regex from the file.
 
-    each file has 1 regex per line 
+    Each file has 1 regex per line. 
     """
     allowed_special_expressions = {
         '%s': r'([{0}\s])',
@@ -74,10 +83,9 @@ class InputRegex:
         self.python_regex: str = input_regex
 
     def convert_to_python_regex(self):
-        """
-            convert the input_regex into the python's regex
+        """Convert the input_regex into the python's regex.
 
-            :raises InvalidRegexException
+        :raises InvalidRegexException When the regex contains invalid or unsupported characters and constructs.
         """
         self._validate()
 
@@ -85,25 +93,22 @@ class InputRegex:
 
         self.negate_non_special_characters()
 
-        #  todo: add parentesis?
         pass
 
     def _validate(self):
-        """go through the regex and try to determine whether it has the right format"""
+        """Go through the regex and try to determine whether it has the right format."""
 
         match = re.search(r'\.{2,}', self.python_regex)
         if match:
             raise InvalidRegexException('Regex can not contain A.(.+)A')
 
+    def _convert_special_expressions(self):
+        """Convert the special regular expressions into classical python regular expressions"""
+
         self.python_regex = re.sub(r'(?<!%)\.', '', self.python_regex)  # negative lookbehind
 
         # escape special characters
         self.python_regex = re.sub(r'([\\?\[^\]${\}<>\-])', r'\\\1', self.python_regex)
-
-        pass
-
-    def _convert_special_expressions(self):
-        """convert the special regular expressions"""
 
         # get all special regexes (char % and another char)
         for special in re.finditer(r'(%.)', self.python_regex):
@@ -126,11 +131,6 @@ class InputRegex:
                     new_regex = new_regex.format('')
                     self.python_regex = self.python_regex.replace(special.groups()[0], new_regex)
 
-    def _escape(self, input_regex: str):
-        finds = re.findall(input_regex, self.python_regex)
-        for find in finds:
-            self.python_regex = self.python_regex.replace(find, re.escape(find))
-
     def negate_non_special_characters(self):
-        # find all ! - no preceeding and no succeeding %
+        """Find all '!' no preceeding and no succeeding '%' ."""
         self.python_regex = re.sub(r'(?<!%\[)!([^%\]])', r'[^\1]', self.python_regex)

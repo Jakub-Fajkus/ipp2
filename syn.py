@@ -1,3 +1,13 @@
+#!/usr/bin/env python3
+
+"""
+    File name: syn.py
+    Author: Jakub Fajkus
+    Date created: 14.4.2017
+    Date last modified: 17.4.2017
+    Python Version: 3.6
+"""
+
 import sys
 from app.arguments.arguments import ArgumentsParser, Config
 from app.arguments.exceptions import InvalidArgumentsException
@@ -8,7 +18,6 @@ from app.app import App
 config = Config()
 argParser = ArgumentsParser()
 app = App(config)
-
 
 try:
     argParser.parse_arguments(config=config)

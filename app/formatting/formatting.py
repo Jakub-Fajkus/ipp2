@@ -1,7 +1,17 @@
+"""
+    File name: replacing.py
+    Author: Jakub Fajkus
+    Date created: 14.4.2017
+    Date last modified: 17.4.2017
+    Python Version: 3.6
+"""
+
 import re
 
 
-class Replacer:
+class Formatter:
+    """Takes the input and the formatting and produces the formatted output."""
+
     def __init__(self, input_string: str, formattings: list) -> None:
         self.input_string: str = input_string
         self.formattings: list = formattings
@@ -9,11 +19,13 @@ class Replacer:
         self.queues = {}
         self.delays = {}
 
-    def replace_all(self) -> str:
-        # create an list of queues which will hold the tags which have to be closed after each index
-
-        # for each index, check if there are any closing tags in the queue, if so, apply them
-        # keep going till the end of the world(or the string, at least)
+    def format(self) -> str:
+        """Format the input using the regexes and formatting
+        
+        Create an list of queues which will hold the tags which have to be closed after each index.
+        For each index, check if there are any closing tags in the queue, if so, apply them.
+        Keep going till the end of the world(or the string, at least).
+        """
 
         # iterate over each character in the input
         for current_position in range(0, len(self.input_string)):
@@ -45,10 +57,7 @@ class Replacer:
                                 self.output_string += tag.opening
 
                                 if current_position + match_size in self.queues:
-                                    # print('COLLISION ON QUEUES!', current_position, tag)
-
                                     self.queues[current_position + match_size].insert(0, tag)  # add tags to close
-                                    # self.queues[current_position + match_size].append(tag)  # add tags to close
                                 else:
                                     self.queues[current_position + match_size] = [tag]
 
@@ -59,19 +68,21 @@ class Replacer:
         if len(self.input_string) in self.queues:
             self.queues[len(self.input_string)].reverse()
             for tag in self.queues[len(self.input_string)]:
-                # print("CLOSING TAG:", tag.closing)
                 self.output_string += tag.closing
 
         # print(self.output_string)
         return self.output_string
 
     def decrement_delays(self):
+        """Decrement delays for all tags."""
         for value in self.delays:
             self.delays[value] -= 1
 
     def is_delayed(self, formatting_tuple: tuple):
-        if formatting_tuple[2] in self.delays and self.delays[formatting_tuple[2]] > 0:  # maybe 1 ?
+        """Check whether the tuple(regex, tag) is delayed."""
+        if formatting_tuple[2] in self.delays and self.delays[formatting_tuple[2]] > 0:
             return True
 
     def set_delay(self, formatting_tuple: tuple, delay: int):
+        """Set delay for the tuple."""
         self.delays[formatting_tuple[2]] = delay

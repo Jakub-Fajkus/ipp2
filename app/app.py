@@ -1,5 +1,13 @@
+"""
+    File name: app.py
+    Author: Jakub Fajkus
+    Date created: 14.4.2017
+    Date last modified: 17.4.2017
+    Python Version: 3.6
+"""
+
 from app.arguments.arguments import Config
-from app.replacing.replacing import Replacer
+from app.formatting.formatting import Formatter
 from app.io.io import Input
 from app.io.io import Output
 from app.regex.regex import FormatFileParser
@@ -28,8 +36,8 @@ class App:
             return
 
         formatting = format_parser.parse_formatting(formatting)
-        replacer = Replacer(input_string, formatting)
-        output_string = replacer.replace_all()
+        replacer = Formatter(input_string, formatting)
+        output_string = replacer.format()
 
         self.present_output(output_string)
 
