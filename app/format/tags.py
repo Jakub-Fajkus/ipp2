@@ -1,4 +1,4 @@
-from app.regex.exceptions.InvalidRegexException import InvalidRegexException
+from app.regex.exceptions import InvalidRegexException
 import re
 
 
@@ -27,7 +27,6 @@ class HtmlTag:
                 return FontColorTag(match.groups()[0])
 
         raise InvalidRegexException('Invalid formatting:' + formatting)
-
 
 
 class BoldTag(HtmlTag):

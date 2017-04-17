@@ -30,7 +30,9 @@ class Replacer:
             for formatting_tuple in self.formattings:
                 if not self.is_delayed(formatting_tuple):
                     # print(formatting_tuple[0].python_regex)
-                    match = re.match(formatting_tuple[0].python_regex, self.input_string[current_position:], flags=re.DOTALL)
+                    match = re.match(pattern=formatting_tuple[0].python_regex,
+                                     string=self.input_string[current_position:],
+                                     flags=re.DOTALL)
                     if match:
                         match_size = match.regs[0][1]
                         # print(match, match_size, match.re)

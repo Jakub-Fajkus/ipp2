@@ -1,4 +1,4 @@
-from app.AppException import AppException
+from app.exceptions import AppException
 
 
 class InvalidRegexException(AppException):

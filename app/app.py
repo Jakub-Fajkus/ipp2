@@ -1,8 +1,8 @@
-from app.arguments.Config import Config
-from app.Replacer import Replacer
-from app.io.Input import Input
-from app.io.Output import Output
-from app.regex.FormatFileParser import FormatFileParser
+from app.arguments.arguments import Config
+from app.replacing.replacing import Replacer
+from app.io.io import Input
+from app.io.io import Output
+from app.regex.regex import FormatFileParser
 import re
 
 
@@ -17,11 +17,11 @@ class App:
             self.print_help()
             return
 
-        input = Input(config=self._config)
+        input_object = Input(config=self._config)
         format_parser = FormatFileParser()
-        input_string = input.get_input()
+        input_string = input_object.get_input()
 
-        formatting = input.get_format_table()
+        formatting = input_object.get_format_table()
         if not formatting:
             self.present_output(input_string)
 

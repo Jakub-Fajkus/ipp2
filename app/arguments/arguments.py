@@ -1,9 +1,28 @@
 import re
 import sys
-
-from app.arguments.Config import Config
 from app.arguments.exceptions import InvalidArgumentsException
 
+class Config:
+    def __init__(self):
+        self.values = {}
+
+    def validate(self):
+        """validate the configuration"""
+        # can not use help with any other arguments
+        if 'help' in self.values and len(self.values) > 1:
+            raise InvalidArgumentsException('Can not use argument "help" with any other argument')
+
+    def print_help(self) -> bool:
+        return 'help' in self.values
+
+    def use_stdin(self) -> bool:
+        return 'input' not in self.values
+
+    def use_stdout(self) -> bool:
+        return 'output' not in self.values
+
+    def add_br(self) -> bool:
+        return 'br' in self.values
 
 class ArgumentsParser:
     def __init__(self):
@@ -42,7 +61,7 @@ class ArgumentsParser:
             elif self._process_argument(r"^-b$", arg, 'br', False):
                 pass
             else:
-                raise InvalidArgumentsException.InvalidArgumentsException('Unknown argument ' + arg)
+                raise InvalidArgumentsException('Unknown argument ' + arg)
 
     def _process_argument(self, regex: str, arg: str, arg_semantics: str, add_to_config: bool = True) -> bool:
         """
@@ -63,7 +82,7 @@ class ArgumentsParser:
             try:
                 self._config.values[arg_semantics] = input_match.group(1) if add_to_config else None
             except IndexError:
-                raise InvalidArgumentsException.InvalidArgumentsException("Invalid argument: " + arg)
+                raise InvalidArgumentsException("Invalid argument: " + arg)
 
             return True
         else:
@@ -74,7 +93,7 @@ class ArgumentsParser:
             :raise InvalidArgumentsException When the argument was already used.
         """
         if arg_semantics in self._processed_arguments:
-            raise InvalidArgumentsException.InvalidArgumentsException(
+            raise InvalidArgumentsException(
                 'Invalid parameters - cannot use the same parameter twice'
             )
         else:
