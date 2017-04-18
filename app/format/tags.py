@@ -59,11 +59,11 @@ class TagFactory:
     """Factory class for the tags."""
 
     @staticmethod
-    def create(formatting: str):
-        """Create and return a tag object according to the 'formatting' string.  
+    def create(format_string: str):
+        """Create and return a tag object according to the 'format' string.  
         
-        :param formatting: String which defines the formatting.
-            Supported formatting:
+        :param format_string: String which defines the format.
+            Supported format:
                 - bold
                 - intalic
                 - underline
@@ -72,21 +72,21 @@ class TagFactory:
                 - color:XXXXXX, where X is any hexadecimal character
         :return: 
         """
-        if formatting == 'bold':
+        if format_string == 'bold':
             return BoldTag()
-        elif formatting == 'italic':
+        elif format_string == 'italic':
             return ItalicTag()
-        elif formatting == 'underline':
+        elif format_string == 'underline':
             return UnderlineTag()
-        elif formatting == 'teletype':
+        elif format_string == 'teletype':
             return TeletypeTag()
         else:
-            match = re.match(r'size:([1-7])', formatting)
+            match = re.match(r'size:([1-7])', format_string)
             if match:
                 return FontSizeTag(match.groups()[0])
 
-            match = re.match(r'color:([a-fA-F0-9]{6})', formatting)
+            match = re.match(r'color:([a-fA-F0-9]{6})', format_string)
             if match:
                 return FontColorTag(match.groups()[0])
 
-        raise InvalidRegexException('Invalid formatting:' + formatting)
+        raise InvalidRegexException('Invalid format:' + format_string)

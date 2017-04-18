@@ -15,10 +15,12 @@ import re
 
 
 class App:
+    """Represents the application itself."""
     def __init__(self, config: Config):
         self._config = config
 
     def run(self):
+        """The starting point of the application."""
         self._config.validate()
 
         if 'help' in self._config.values:
@@ -29,14 +31,14 @@ class App:
         format_parser = FormatFileParser()
         input_string = input_object.get_input()
 
-        formatting = input_object.get_format_table()
-        if not formatting:
+        formatting_table = input_object.get_format_table()
+        if not formatting_table:
             self.present_output(input_string)
 
             return
 
-        formatting = format_parser.parse_formatting(formatting)
-        replacer = Formatter(input_string, formatting)
+        formatting_table = format_parser.parse_formatting(formatting_table)
+        replacer = Formatter(input_string, formatting_table)
         output_string = replacer.format()
 
         self.present_output(output_string)
@@ -52,6 +54,7 @@ class App:
                             )
 
     def present_output(self, output_string: str):
+        """Write output to the desired destination."""
         output = Output(config=self._config)
 
         # add br to each line

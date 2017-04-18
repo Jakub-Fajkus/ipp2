@@ -28,21 +28,18 @@ class FormatFileParser:
             # get the regex(before first '\t+'
             regex_match = re.match(r'^(.*?)(\t+)(.*$)', line)
             if regex_match:
-                regex = regex_match.groups()[0]
-                regex_object = InputRegex(regex)
+                regex_var = regex_match.groups()[0]
+                regex_object = InputRegex(regex_var)
                 regex_object.convert_to_python_regex()
-                # print("Regex:", regex)
 
                 tags = []
                 # the formatting is a list of strings, separated by ',[SPACE\t]*'
-                for formatting in regex_match.groups()[2].split(','):  # get the 3rd group and split it by ','
-                    # print(formatting)
-                    # print(formatting.strip())
+                for formatting_var in regex_match.groups()[2].split(','):  # get the 3rd group and split it by ','
 
-                    if not formatting:
+                    if not formatting_var:
                         raise InvalidRegexException('Empty formatting on line: ' + line)
 
-                    tags.append(TagFactory.create(formatting.strip()))
+                    tags.append(TagFactory.create(formatting_var.strip()))
 
                 formattings.append((regex_object, tags, tuple_number))
                 tuple_number += 1
