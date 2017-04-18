@@ -2,7 +2,7 @@
     File name: regex.py
     Author: Jakub Fajkus
     Date created: 14.4.2017
-    Date last modified: 17.4.2017
+    Date last modified: 18.4.2017
     Python Version: 3.6
 """
 
@@ -109,7 +109,6 @@ class InputRegex:
 
         # get all special regexes (char % and another char)
         for special in re.finditer(r'(%.)', self.python_regex):
-            # print(special)
             if special.groups()[0] not in self.allowed_special_expressions:
                 raise InvalidRegexException('Invalid special expression: ' + special.groups()[0])
             else:

@@ -2,7 +2,7 @@
     File name: arguments.py
     Author: Jakub Fajkus
     Date created: 14.4.2017
-    Date last modified: 17.4.2017
+    Date last modified: 18.4.2017
     Python Version: 3.6
 """
 
@@ -65,7 +65,6 @@ class ArgumentsParser:
         self._config = config
 
         for arg in sys.argv[1:]:  # skip the script path
-            # print(arg)
 
             if self._process_argument(regex=r"^--input=(.*)$", arg=arg, arg_semantics='input'):
                 pass

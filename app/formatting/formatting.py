@@ -2,7 +2,7 @@
     File name: replacing.py
     Author: Jakub Fajkus
     Date created: 14.4.2017
-    Date last modified: 17.4.2017
+    Date last modified: 18.4.2017
     Python Version: 3.6
 """
 
@@ -41,14 +41,11 @@ class Formatter:
             # get match for all regexes(in the order in the given rules)
             for formatting_tuple in self.formattings:
                 if not self.is_delayed(formatting_tuple):
-                    # print(formatting_tuple[0].python_regex)
                     match = re.match(pattern=formatting_tuple[0].python_regex,
                                      string=self.input_string[current_position:],
                                      flags=re.DOTALL)
                     if match:
                         match_size = match.regs[0][1]
-                        # print(match, match_size, match.re)
-
                         # remove empty string matches
                         if match_size != 0:
                             self.set_delay(formatting_tuple, match_size)
@@ -70,7 +67,6 @@ class Formatter:
             for tag in self.queues[len(self.input_string)]:
                 self.output_string += tag.closing
 
-        # print(self.output_string)
         return self.output_string
 
     def decrement_delays(self):

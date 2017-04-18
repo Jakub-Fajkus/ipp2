@@ -2,7 +2,7 @@
     File name: io.py
     Author: Jakub Fajkus
     Date created: 14.4.2017
-    Date last modified: 17.4.2017
+    Date last modified: 18.4.2017
     Python Version: 3.6
 """
 
